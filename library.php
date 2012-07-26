@@ -283,13 +283,10 @@ class CheezCapRichTextOption extends CheezCapTextOption {
 
 	function write_html() {
 		$stdText = $this->std;
-
 		$stdTextOption = get_option( $this->id );
 		if ( ! empty( $stdTextOption ) )
 			$stdText = $stdTextOption;
-
 		?>
-
 		<tr valign="top">
 			<th scope="row"><label for="<?php echo $this->id; ?>"><?php echo esc_html( $this->name . ':' ); ?></label></th>
 			<?php $commentWidth = 1; ?>
