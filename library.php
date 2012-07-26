@@ -269,6 +269,62 @@ class CheezCapMultipleCheckboxesOption extends CheezCapOption {
 	}
 }
 
+class CheezCapRichTextOption extends CheezCapTextOption {
+	var $useTextArea;
+	
+	function __construct( $_name, $_desc, $_id, $_std = '', $_useTextArea = false ) {
+		parent::__construct( $_name, $_desc, $_id, $_std );
+		$this->useTextArea = true;
+	}
+
+	function save( $value ) {
+		parent::save(  $value  );
+	}
+
+	function write_html() {
+		$stdText = $this->std;
+
+		$stdTextOption = get_option( $this->id );
+		if ( ! empty( $stdTextOption ) )
+			$stdText = $stdTextOption;
+
+		?>
+
+		<tr valign="top">
+			<th scope="row"><label for="<?php echo $this->id; ?>"><?php echo esc_html( $this->name . ':' ); ?></label></th>
+			<?php $commentWidth = 1; ?>
+
+			<td rowspan="2">
+			<?php wp_editor(  $this->sanitize( $stdText ),  esc_attr( $this->id ) , $settings = array('wpautop' => true) ); ?>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td colspan="<?php echo absint( $commentWidth ); ?>">
+				<label for="<?php echo $this->id; ?>">
+					<small><?php echo  $this->desc ?></small>
+				</label>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td colspan="2"><hr /></td>
+		</tr>
+		<?php
+	}
+	
+	function sanitize( $value ) {
+		return wp_kses_post( $value );
+	}
+	
+	
+	function get() {
+		$value = get_option( $this->id );
+		if ( empty( $value ) )
+			return $this->std;
+		return  $this->sanitize( $value );
+	}
+}
+
 class CheezCapImportData {
 	var $dict = array();
 }
+
